@@ -56,27 +56,6 @@ public class MySQLConnection implements DBConnection {
 	}
 
 	@Override
-	public String getFullname(String userId) {
-		// TODO Auto-generated method stub
-		if (conn == null) {
-			return "";
-		}		
-		String name = "";
-		try {
-			String sql = "SELECT first_name, last_name FROM users WHERE user_id = ? ";
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, userId);
-			ResultSet rs = statement.executeQuery();   // size = 0 or 1
-			if (rs.next()) {
-				name = rs.getString("first_name") + " " + rs.getString("last_name");
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		return name;
-	}
-	
-	@Override
 	public boolean registerUser(String userId, String password, String firstname, String lastname) {
 		if (conn == null) {
 			System.err.println("DB connection failed");

@@ -16,7 +16,7 @@ public class LoginService {
 			String userId = input.getString("user_id");
 			String password = input.getString("password");
 			if (connection.verifyLogin(userId, password)) {
-				output.put("user_id", userId).put("name", connection.getFullname(userId));
+				//output.put("user_id", userId).put("name", connection.getFullname(userId));
 				return true;
 			} 
 		} catch (Exception e) {
