@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
+import services.LogoutService;
+
 /**
  * Servlet implementation class Logout
  */
@@ -28,11 +32,7 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();
-		}
-		response.getWriter().append("Served at: ").append(request.getContextPath()).append("/WebContent/index.html");
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -40,7 +40,24 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		try {
+			// get session from request
+			HttpSession session = request.getSession(false);
+			// create JSONObject "output" to show if the logout is successful or not
+			JSONObject output = new JSONObject();
+			LogoutService service = new LogoutService();
+			if (service.verifyLogout(session, output))	{
+				session.invalidate();
+				output.put("status", "OK");			// append response status
+			} else {
+				output.put("status", "User Already Logged Out");		// append response status
+				response.setStatus(401);
+			}
+			JsonHelper.writeJsonObject(response, output);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
