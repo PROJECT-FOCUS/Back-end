@@ -10,8 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
-import db.DBConnection;
-import db.DBConnectionFactory;
 import services.LoginService;
 
 /**
@@ -34,24 +32,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		DBConnection connection = DBConnectionFactory.getConnection();
-		try {
-			HttpSession session = request.getSession(false);
-			JSONObject obj = new JSONObject();
-			if (session != null) {
-				String userId = session.getAttribute("user_id").toString();
-				obj.put("status", "OK").put("user_id", userId).put("name", connection.getFullname(userId));
-			} else {
-				obj.put("status", "Invalid Session");
-				response.setStatus(403);
-			}
-			JsonHelper.writeJsonObject(response, obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			connection.close();
-		}
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**

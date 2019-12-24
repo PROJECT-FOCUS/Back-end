@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import db.DBConnection;
 import db.DBConnectionFactory;
+import services.RegisterService;
 
 /**
  * Servlet implementation class Register
@@ -30,10 +31,10 @@ public class Register extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		// TODO Auto-generated method stub
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
-//	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -44,19 +45,16 @@ public class Register extends HttpServlet {
 		try {
 			// convert request body into JSONobject "input"
 			JSONObject input = JsonHelper.readJSONObject(request);
-			String userId = input.getString("user_id");
-			String password = input.getString("password");
-			String firstname = input.getString("first_name");
-			String lastname = input.getString("last_name");
-			
-			// write user info into the database and create JSONobject "obj" for the feedback
-			JSONObject obj = new JSONObject();
-			if (connection.registerUser(userId, password, firstname, lastname)) {
-				obj.put("status", "OK");
+			// create JSONobject "output" to show if the registration is successful or not
+			JSONObject output = new JSONObject();
+			RegisterService service = new RegisterService();
+			if (service.verifyRegister(input, output))	{
+				output.put("status", "OK");			// append response status
 			} else {
-				obj.put("status", "User Already Exists");
+				output.put("status", "User Already Exists");		// append response status
+				response.setStatus(401);
 			}
-			JsonHelper.writeJsonObject(response, obj);
+			JsonHelper.writeJsonObject(response, output);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
