@@ -1,5 +1,12 @@
 package db;
 
+import java.util.Set;
+
+import commons.ExpectedUsageItem;
+import commons.ActualUsageItem;
+import commons.AppCategoryItem;
+
+
 public interface DBConnection {
 	/**
 	 * Close the connection.
@@ -26,5 +33,18 @@ public interface DBConnection {
 	 */
 	public boolean registerUser(String userId, String password, String firstname, String lastname);
 
+	
+	public Set<ExpectedUsageItem> getExpectedUsage(String userId);
+	
+	public void deleteExpectedUsage(String userId);
+	
+	public void setExpectedUsage(String userId, Set<ExpectedUsageItem> items); 
+	
+	
+	public Set<ActualUsageItem> getActualUsage(String userId);
+	
+	public void deleteActualUsage(String userId);
+	
+	public void setActualUsage(String userId, Set<ActualUsageItem> items);
 	
 }

@@ -5,7 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.util.HashSet;
+import java.util.Set;
 
+import commons.ActualUsageItem;
+import commons.ExpectedUsageItem;
 import db.DBConnection;
 
 public class MySQLConnection implements DBConnection {
@@ -76,5 +81,136 @@ public class MySQLConnection implements DBConnection {
 		}
 		return false;	
 	}
+	
+	@Override
+	public Set<ExpectedUsageItem> getExpectedUsage(String userId)	{
+		if (conn == null) {
+			return null;
+		}
+		
+		Set<ExpectedUsageItem> expUsageItems = new HashSet<>();
+		
+		try {
+			String sql = "SELECT app_id, exp_usage FROM expected_usage WHERE user_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String appId = rs.getString("app_id");
+				Long durationInSec = rs.getLong("exp_usage");
+		        Duration duration = Duration.ofSeconds(durationInSec);
+		        expUsageItems.add(new ExpectedUsageItem(appId, duration));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return expUsageItems;
+	}
 
+	
+	@Override
+	public void deleteExpectedUsage(String userId)		{
+		if (conn == null) {
+			System.err.println("DB connection failed");
+			return;
+		}
+
+		try {
+			String sql = "DELETE FROM expected_usage WHERE user_id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	@Override
+	public void setExpectedUsage(String userId, Set<ExpectedUsageItem> items)	{
+		if (conn == null) {
+			System.err.println("DB connection failed");
+			return;
+		}
+		try {
+			String sql = "INSERT IGNORE INTO expected_usage VALUES (?, ?, ?)";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1,  userId);
+			for (ExpectedUsageItem expUsageItem : items) {
+				ps.setString(2, expUsageItem.getAppId());
+				ps.setLong(3, expUsageItem.getUsage().getSeconds() );
+				ps.execute();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	@Override
+	public Set<ActualUsageItem> getActualUsage(String userId)	{
+		if (conn == null) {
+			return null;
+		}
+		
+		Set<ActualUsageItem> actUsageItems = new HashSet<>();
+		
+		try {
+			String sql = "SELECT app_id, act_usage FROM actual_usage WHERE user_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String appId = rs.getString("app_id");
+				Long durationInSec = rs.getLong("act_usage");
+		        Duration duration = Duration.ofSeconds(durationInSec);
+		        actUsageItems.add(new ActualUsageItem(appId, duration));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return actUsageItems;
+	}
+
+	@Override
+	public void deleteActualUsage(String userId)	{
+		if (conn == null) {
+			System.err.println("DB connection failed");
+			return;
+		}
+
+		try {
+			String sql = "DELETE FROM actual_usage WHERE user_id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void setActualUsage(String userId, Set<ActualUsageItem> items)	{
+		if (conn == null) {
+			System.err.println("DB connection failed");
+			return;
+		}
+		try {
+			String sql = "INSERT IGNORE INTO actual_usage VALUES (?, ?, ?)";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			for (ActualUsageItem actUsageItem : items) {
+				ps.setString(2, actUsageItem.getAppId());
+				ps.setLong(3, actUsageItem.getUsage().getSeconds() );
+				ps.execute();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }
