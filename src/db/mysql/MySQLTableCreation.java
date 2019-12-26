@@ -40,9 +40,11 @@ public class MySQLTableCreation {
 				statement.executeUpdate(sql);
 				
 				sql = "CREATE TABLE apps (" 
-						+ "app_id VARCHAR(255) NOT NULL," 
-						+ "category VARCHAR(255) NOT NULL,"
-						+ "PRIMARY KEY (app_id)" 
+						+ "user_id VARCHAR(127) NOT NULL," 
+						+ "app_id VARCHAR(127) NOT NULL," 
+						+ "package VARCHAR(127) NOT NULL,"
+						+ "category VARCHAR(127) NOT NULL,"
+						+ "PRIMARY KEY (user_id)" 
 						+ ")";
 				statement.executeUpdate(sql);
 				
