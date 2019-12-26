@@ -16,4 +16,8 @@ public class AppCategoryItem {
 	public String getCategory()	{
 		return category;
 	}
+	
+	public String toString() {
+		return "<" + appId + ", " + category + ">";
+	}
 }

@@ -82,6 +82,7 @@ public class MySQLConnection implements DBConnection {
 		}
 		return false;	
 	}
+	
 	@Override
 	public Set<String> getUserApps(String userId)	{
 		if (conn == null) {
