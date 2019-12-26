@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import commons.ActualUsageItem;
+import commons.AppCategoryItem;
 import commons.ExpectedUsageItem;
 import db.DBConnection;
 
@@ -81,11 +82,85 @@ public class MySQLConnection implements DBConnection {
 		}
 		return false;	
 	}
+	@Override
+	public Set<String> getUserApps(String userId)	{
+		if (conn == null) {
+			return new HashSet<String>();
+		}
+		
+		Set<String> appIds = new HashSet<>();
+		
+		try {
+			String sql = "SELECT app_id FROM expected_usage WHERE user_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String appId = rs.getString("app_id");
+				appIds.add(appId);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return appIds;
+	}
+	
+	@Override
+	public Set<AppCategoryItem> getAppCategories(Set<String> appIds)	{
+		if (conn == null) {
+			return new HashSet<AppCategoryItem>();
+		}
+		
+		Set<AppCategoryItem> appCategories = new HashSet<>();
+		
+		try {
+			String sql = "SELECT category FROM apps WHERE app_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			for (String appId : appIds)	{
+				stmt.setString(1, appId);
+				ResultSet rs = stmt.executeQuery();
+				if (rs.next()) {
+					String category = rs.getString("category");
+					appCategories.add(new AppCategoryItem(appId, category));
+				} else {
+					appCategories.add(new AppCategoryItem(appId, ""));
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return appCategories;
+	}
+	
+	@Override
+	public void setAppCategories(Set<AppCategoryItem> appCategories)	{
+		if (conn == null) {
+			System.err.println("DB connection failed");
+			return;
+		}
+		
+		try {
+			String sql = "INSERT IGNORE INTO apps VALUES (?, ?)";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			for (AppCategoryItem appCategory : appCategories) {
+				ps.setString(1, appCategory.getAppId());
+				ps.setString(2, appCategory.getCategory());
+				ps.execute();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	@Override
 	public Set<ExpectedUsageItem> getExpectedUsage(String userId)	{
 		if (conn == null) {
-			return null;
+			return new HashSet<ExpectedUsageItem>();
 		}
 		
 		Set<ExpectedUsageItem> expUsageItems = new HashSet<>();
@@ -152,7 +227,7 @@ public class MySQLConnection implements DBConnection {
 	@Override
 	public Set<ActualUsageItem> getActualUsage(String userId)	{
 		if (conn == null) {
-			return null;
+			return new HashSet<ActualUsageItem>();
 		}
 		
 		Set<ActualUsageItem> actUsageItems = new HashSet<>();

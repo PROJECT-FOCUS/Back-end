@@ -66,6 +66,9 @@ public class MySQLTableCreation {
 						+ ")";
 				statement.executeUpdate(sql);
 				
+				// TBA: expected_usage_history
+				// TBA: actual_usage_history
+				
 				// Step 4: insert fake user 1111/3229c1097c00d497a0fd282d586be050
 				sql = "INSERT INTO users VALUES('1111', '3229c1097c00d497a0fd282d586be050', 'John', 'Smith')";
 				statement.executeUpdate(sql);

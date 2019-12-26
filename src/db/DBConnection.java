@@ -33,18 +33,25 @@ public interface DBConnection {
 	 */
 	public boolean registerUser(String userId, String password, String firstname, String lastname);
 
+	// Given a userId, return set of appIds
+	public Set<String> getUserApps(String userId); 
+	// Given a set of appIds, return set of <appId, category> pairs 
+	public Set<AppCategoryItem> getAppCategories(Set<String> appIds); 
+	// set category for a given set of appIds. 
+	public void setAppCategories(Set<AppCategoryItem> appCategories); 
 	
+	//
 	public Set<ExpectedUsageItem> getExpectedUsage(String userId);
-	
+	// 
 	public void deleteExpectedUsage(String userId);
-	
+	//
 	public void setExpectedUsage(String userId, Set<ExpectedUsageItem> items); 
 	
-	
+	//
 	public Set<ActualUsageItem> getActualUsage(String userId);
-	
+	//
 	public void deleteActualUsage(String userId);
-	
+	//
 	public void setActualUsage(String userId, Set<ActualUsageItem> items);
 	
 }
