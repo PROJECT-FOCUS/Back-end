@@ -47,12 +47,9 @@ public class Login extends HttpServlet {
 			LoginService  service = new LoginService();
 			if (service.verifyLogin(input, output))	{
 				HttpSession session = request.getSession();
-				session.setAttribute("user_id", output.getString("user_id"));
-				session.setMaxInactiveInterval(600);
-				output.put("status", "OK");			// append response status
-				/// TBA: first + last
+				session.setAttribute("user_id", input.getString("user_id"));
+				session.setMaxInactiveInterval(7200);
 			} else {
-				output.put("status", "User Doesn't Exist");		// append response status
 				response.setStatus(401);
 			}
 			JsonHelper.writeJsonObject(response, output);
