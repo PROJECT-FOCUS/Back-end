@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import commons.ActualUsageItem;
 import commons.ExpectedUsageItem;
+import commons.DurationHelper;
 
 import db.DBConnection;
 import db.DBConnectionFactory;
@@ -19,10 +20,12 @@ public class OverviewService {
 	// output: exp_usage + act_usage (if success) or empty (o/w)
 	public boolean verifyOverview(JSONObject input, JSONObject output) {
 		try {
+			/*
 			// verify if user exists first
 			if (!userExists(input, output)) {
 				return false;
 			}
+			*/
 			// fetch data
 			if (getExpectedUsage(input, output) && getActualUsage(input, output)) {
 				return true;
@@ -33,6 +36,7 @@ public class OverviewService {
 		return false;
 	}
 	
+	/*
 	public boolean userExists(JSONObject input, JSONObject output) {
 		DBConnection connection = DBConnectionFactory.getConnection();
 		try {
@@ -47,6 +51,7 @@ public class OverviewService {
 		}
 		return false;
 	}
+	*/
 	
 	public boolean getExpectedUsage(JSONObject input, JSONObject output) {
 		DBConnection connection = DBConnectionFactory.getConnection();

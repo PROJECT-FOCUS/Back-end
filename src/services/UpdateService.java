@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import commons.AppCategoryItem;
 import commons.ExpectedUsageItem;
+import commons.DurationHelper;
 
 import external.AndroidAppStoreClient;
 
@@ -21,20 +22,25 @@ public class UpdateService {
 	// output: empty (o/w)
 	public boolean verifyUpdate(JSONObject input, JSONObject output) {
 		try {
+			/*
 			// verify if user exists first
 			if (!userExists(input, output)) {
 				return false;
 			}
+			*/
 			// write data
-			if (setExpectedUsage(input, output) && setAppCategories(input, output)) {
-				return true;
+			if (!setAppCategories(input, output)) {
+				return false;
+			}
+			if (!setExpectedUsage(input, output))	{
+				return false;
 			}
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 	}
-	
+	/*
 	public boolean userExists(JSONObject input, JSONObject output) {
 		DBConnection connection = DBConnectionFactory.getConnection();
 		try {
@@ -49,7 +55,7 @@ public class UpdateService {
 		}
 		return false;
 	}
-		
+	*/	
 	public boolean setExpectedUsage(JSONObject input, JSONObject output) {
 		DBConnection connection = DBConnectionFactory.getConnection();
 		// delete ExpectedUsage set according to this user_id
@@ -94,8 +100,6 @@ public class UpdateService {
 	
 	public boolean setAppCategories(JSONObject input, JSONObject output) {
 		DBConnection connection = DBConnectionFactory.getConnection();
-		// delete ExpectedUsage set according to this user_id
-		// and write the new set into database
 		try {
 			// get JASONArray
 			JSONArray expUsageArray = input.getJSONArray("exp_usage");		

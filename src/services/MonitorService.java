@@ -34,6 +34,7 @@ public class MonitorService {
 			}
 			
 			// update ActualUsage
+			connection.deleteActualUsage(userId);
 			connection.setActualUsage(userId, actUsageItems);
 			
 			// identify overtimed apps

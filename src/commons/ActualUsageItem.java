@@ -12,9 +12,9 @@ public class ActualUsageItem {
 		usage = use;
 	}
 	
-	public ActualUsageItem(String id, String use)	{
+	public ActualUsageItem(String id, String usageStr)	{
 		appId = id;
-		usage = Duration.ofSeconds(DurationHelper.getSecondsFromFormattedDuration(use));
+		usage = Duration.ofSeconds(DurationHelper.getSecondsFromFormattedDuration(usageStr));
 	}
 	
 	public String getAppId()	{

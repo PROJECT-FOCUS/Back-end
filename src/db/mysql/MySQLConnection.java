@@ -252,13 +252,15 @@ public class MySQLConnection implements DBConnection {
 			return;
 		}
 		try {
-			String sql = "INSERT IGNORE INTO expected_usage VALUES (?, ?, ?)";
+			String sql = "INSERT INTO expected_usage VALUES (?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1,  userId);
 			for (ExpectedUsageItem expUsageItem : items) {
 				ps.setString(2, expUsageItem.getAppId());
 				ps.setLong(3, expUsageItem.getUsage().getSeconds() );
-				ps.execute();
+				if (1!=ps.executeUpdate())	{
+					return;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
