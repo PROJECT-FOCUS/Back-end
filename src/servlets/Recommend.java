@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import commons.App;
+import services.MonitorService;
 import services.RecommendService;
 
 /**
@@ -48,13 +50,18 @@ public class Recommend extends HttpServlet {
 			response.setStatus(403);
 			return;
 		}
-		String userId = session.getAttribute("user_id").toString();
-		RecommendService recommendation = new RecommendService();
-		List<App> apps = recommendation.recommend(userId);
-		JSONArray array = new JSONArray();
-		for (App a : apps) {
-			array.put(a.toJSONObject());
+		
+		try {
+			JSONObject input = JsonHelper.readJSONObject(request);
+			JSONObject output = new JSONObject();
+			RecommendService service = new RecommendService();
+			if (!service.recommend(input, output))	{
+				response.setStatus(500);
+			}
+			JsonHelper.writeJsonObject(response, output);
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		JsonHelper.writeJsonArray(response, array);
 	}
 }

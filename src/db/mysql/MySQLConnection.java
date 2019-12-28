@@ -84,6 +84,28 @@ public class MySQLConnection implements DBConnection {
 	}
 	
 	@Override
+	public String[] getFullname(String userId) {
+		if (conn == null) {
+			return new String[2];
+		}		
+		String[] name = new String[2];
+		try {
+			String sql = "SELECT first_name, last_name FROM users WHERE user_id = ? ";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, userId);
+			ResultSet rs = statement.executeQuery();   // size = 0 or 1
+			if (rs.next()) {
+				name[0] = rs.getString("first_name");
+				name[1] = rs.getString("last_name");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return name;
+
+	}
+	
+	@Override
 	public Set<String> getUserApps(String userId)	{
 		if (conn == null) {
 			return new HashSet<String>();

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import commons.AppCategoryItem;
 import commons.ExpectedUsageItem;
+import commons.DurationHelper;
 
 import external.AndroidAppStoreClient;
 

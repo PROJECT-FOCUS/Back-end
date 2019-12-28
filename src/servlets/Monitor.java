@@ -51,11 +51,7 @@ public class Monitor extends HttpServlet {
 			JSONObject input = JsonHelper.readJSONObject(request);
 			JSONObject output = new JSONObject();
 			MonitorService  service = new MonitorService();
-			if (service.monitor(input, output))	{
-				output.put("status", "OK");			// append response status
-				/// TBA: first + last
-			} else {
-				output.put("status", "Server Error");		// append response status
+			if (!service.monitor(input, output))	{
 				response.setStatus(500);
 			}
 			JsonHelper.writeJsonObject(response, output);
