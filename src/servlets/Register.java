@@ -50,6 +50,7 @@ public class Register extends HttpServlet {
 			RegisterService service = new RegisterService();
 			if (service.verifyRegister(input, output))	{
 				output.put("status", "OK");			// append response status
+				response.setStatus(200);
 			} else {
 				output.put("status", "User Already Exists");		// append response status
 				response.setStatus(401);

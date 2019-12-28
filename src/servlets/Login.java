@@ -50,6 +50,7 @@ public class Login extends HttpServlet {
 				session.setAttribute("user_id", output.getString("user_id"));
 				session.setMaxInactiveInterval(600);
 				output.put("status", "OK");			// append response status
+				/// TBA: first + last
 			} else {
 				output.put("status", "User Doesn't Exist");		// append response status
 				response.setStatus(401);

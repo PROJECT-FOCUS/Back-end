@@ -35,6 +35,9 @@ public interface DBConnection {
 	
 	public boolean verifyUser(String userId);
 
+	// get first & last name
+	public String[] getFullname(String userId);
+
 	// Given a userId, return set of appIds
 	public Set<String> getUserApps(String userId); 
 	// Given a set of appIds, return set of <appId, category> pairs 
