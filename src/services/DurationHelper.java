@@ -1,5 +1,6 @@
 package services;
 
+import java.time.Duration;
 import java.util.regex.Pattern;
 
 public class DurationHelper {
@@ -32,5 +33,16 @@ public class DurationHelper {
         } catch (NumberFormatException ignored){
             return 0;
         }
+	}
+	
+	public static String reformatDuration(Duration duration) {
+		long seconds = duration.getSeconds();
+	    long absSeconds = Math.abs(seconds);
+	    String positive = String.format(
+	        "%02d:%02d:%02d",
+	        absSeconds / 3600,
+	        (absSeconds % 3600) / 60,
+	        absSeconds % 60);
+	    return seconds < 0 ? "-" + positive : positive;
 	}
 }

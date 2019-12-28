@@ -33,6 +33,8 @@ public interface DBConnection {
 	 */
 	public boolean registerUser(String userId, String password, String firstname, String lastname);
 	
+	public boolean verifyUser(String userId);
+
 	// get first & last name
 	public String[] getFullname(String userId);
 

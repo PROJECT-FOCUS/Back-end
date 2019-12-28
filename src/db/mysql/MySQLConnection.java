@@ -60,6 +60,26 @@ public class MySQLConnection implements DBConnection {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean verifyUser(String userId) {
+		// TODO Auto-generated method stub
+		if (conn == null) {
+			return false;
+		}
+		try {
+			String sql = "SELECT user_id FROM users WHERE user_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
 
 	@Override
 	public boolean registerUser(String userId, String password, String firstname, String lastname) {
