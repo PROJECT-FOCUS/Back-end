@@ -14,7 +14,7 @@ public class ActualUsageItem {
 	
 	public ActualUsageItem(String id, String use)	{
 		appId = id;
-		usage = use;
+		usage = Duration.ofSeconds(DurationHelper.getSecondsFromFormattedDuration(use));
 	}
 	
 	public String getAppId()	{

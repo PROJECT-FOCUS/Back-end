@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import commons.App;
 import services.MonitorService;
 import services.RecommendService;
 
