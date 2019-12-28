@@ -49,7 +49,7 @@ public class Update extends HttpServlet {
 			if (service.verifyUpdate(input, output)) {
 				output.put("status", "OK");			// append response status
 			} else {
-				output.put("status", "Update Expected Usage Time or App Category Failed");		// append response status
+				output.put("status", "Update User Data Failed");		// append response status
 				response.setStatus(401);
 			}
 			JsonHelper.writeJsonObject(response, output);

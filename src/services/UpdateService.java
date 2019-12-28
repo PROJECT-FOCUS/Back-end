@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import commons.AppCategoryItem;
@@ -20,10 +21,30 @@ public class UpdateService {
 	// output: empty (o/w)
 	public boolean verifyUpdate(JSONObject input, JSONObject output) {
 		try {
+			// verify if user exists first
+			if (!userExists(input, output)) {
+				return false;
+			}
+			// write data
 			if (setExpectedUsage(input, output) && setAppCategories(input, output)) {
 				return true;
 			}
 		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean userExists(JSONObject input, JSONObject output) {
+		DBConnection connection = DBConnectionFactory.getConnection();
+		try {
+			// get user_id
+			String user_id = input.getString("user_id");
+			// verify
+			if (connection.verifyUser(user_id)) {
+				return true;
+			}
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return false;
